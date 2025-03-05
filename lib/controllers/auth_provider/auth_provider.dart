@@ -12,6 +12,8 @@ class AuthProviders with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   String? _errorMessage;
   User? _user;
+  bool showOtpField = false;
+  String? verificationId;
 
   String? get errorMessage => _errorMessage;
 
@@ -124,8 +126,7 @@ class AuthProviders with ChangeNotifier {
     _user = null;
     notifyListeners();
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: AppColors.green,
-        content: Text('LogOut successful')));
+        backgroundColor: AppColors.green, content: Text('LogOut successful')));
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -134,5 +135,82 @@ class AuthProviders with ChangeNotifier {
       (route) => false,
     );
   }
+//----------------------Send OTP for Phone Authentication-------------------
 
+   void sendOTP(BuildContext context, TextEditingController phoneNumbers) async {
+    String phoneNumber = '+91${phoneNumbers.text.trim()}';
+    log("Sending OTP to: $phoneNumber");
+
+    try {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          log("Auto verification completed");
+          await _auth.signInWithCredential(credential);
+          _user = _auth.currentUser;
+          notifyListeners();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Auto verification successful!")),
+          );
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => const MyHomeScreen()));
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          log("Verification Failed: ${e.message}");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Verification failed: ${e.message}")),
+          );
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          log("OTP Sent to $phoneNumber");
+          this.verificationId = verificationId;
+          showOtpField = true;
+          notifyListeners();
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          log("Auto retrieval timeout");
+        },
+      );
+    } catch (e) {
+      log("Error sending OTP: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
+  }
+
+  // ----------- Verify OTP ---------------
+  Future<void> verifyOTP(
+      BuildContext context, TextEditingController otpController) async {
+    try {
+      if (verificationId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("No OTP request found.")),
+        );
+        return;
+      }
+
+      String otp = otpController.text.trim();
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId!,
+        smsCode: otp,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      _user = _auth.currentUser;
+      notifyListeners();
+
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("OTP Verified Successfully!")),
+      );
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const MyHomeScreen()));
+    } on FirebaseAuthException catch (e) {
+      log("OTP Verification Failed: ${e.message}");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("OTP Verification Failed: ${e.message}")),
+      );
+    }
+  }
 }

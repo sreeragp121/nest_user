@@ -69,8 +69,8 @@ class MyCustomTextFormField extends StatelessWidget {
                       custometexfieldProvider.visibilityButtonClick();
                     },
                     icon: custometexfieldProvider.isObscureText
-                        ? Icon(Icons.visibility)
-                        : Icon(Icons.visibility_off))
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off))
                 : null,
             contentPadding: contentPadding ??
                 const EdgeInsets.symmetric(vertical: 15.0, horizontal: 18.0),

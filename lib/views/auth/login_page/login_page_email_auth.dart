@@ -115,7 +115,7 @@ class LoginPageEmailAuth extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 70,
+            height: 50,
           ),
         ],
       ),

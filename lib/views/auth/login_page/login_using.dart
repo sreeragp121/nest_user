@@ -7,7 +7,6 @@ class LoginUsing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProviders>(context);
     return SizedBox(
       height: 150,
       child: Column(
@@ -23,28 +22,32 @@ class LoginUsing extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  authProvider.regUsingGoogleAcc(context);
-                },
-                child: SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Image.asset('assets/icons/google_icon.png'),
-                ),
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              SizedBox(
-                width: 50,
-                height: 50,
-                child: Image.asset('assets/icons/facebook_icon.jpg'),
-              ),
-            ],
+          Consumer<AuthProviders>(
+            builder: (context, authProvider, child) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      authProvider.regUsingGoogleAcc(context);
+                    },
+                    child: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: Image.asset('assets/icons/google_icon.png'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Image.asset('assets/icons/facebook_icon.jpg'),
+                  ),
+                ],
+              );
+            },
           )
         ],
       ),
