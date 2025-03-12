@@ -66,20 +66,40 @@ class AuthProviders with ChangeNotifier {
 
 //--------------Registration Using Email---------------------
 
-  Future<bool> createAccount(String email, String password) async {
+  Future<bool> createAccount(
+      String email, String password, BuildContext context) async {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      log("Sign Up");
+      _user = _auth.currentUser;
+      notifyListeners();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: AppColors.green,
+          content: Text('Account Created Successfully'),
+        ),
+      );
+
       return true;
     } on FirebaseAuthException catch (e) {
+      String message;
       if (e.code == 'weak-password') {
-        _errorMessage = 'The password is too weak.';
+        message = 'The password is too weak.';
       } else if (e.code == 'email-already-in-use') {
-        _errorMessage = 'The email is already in use.';
+        message = 'The email is already in use.';
       } else {
-        _errorMessage = e.message;
+        message = e.message ?? 'An unknown error occurred.';
       }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.red,
+          content: Text(message),
+        ),
+      );
+
+      _errorMessage = message;
       notifyListeners();
       return false;
     }
@@ -137,7 +157,7 @@ class AuthProviders with ChangeNotifier {
   }
 //----------------------Send OTP for Phone Authentication-------------------
 
-   void sendOTP(BuildContext context, TextEditingController phoneNumbers) async {
+  void sendOTP(BuildContext context, TextEditingController phoneNumbers) async {
     String phoneNumber = '+91${phoneNumbers.text.trim()}';
     log("Sending OTP to: $phoneNumber");
 
@@ -152,8 +172,8 @@ class AuthProviders with ChangeNotifier {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Auto verification successful!")),
           );
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const MyHomeScreen()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const MyHomeScreen()));
         },
         verificationFailed: (FirebaseAuthException e) {
           log("Verification Failed: ${e.message}");
@@ -200,17 +220,22 @@ class AuthProviders with ChangeNotifier {
       _user = _auth.currentUser;
       notifyListeners();
 
-      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("OTP Verified Successfully!")),
       );
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const MyHomeScreen()));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const MyHomeScreen()));
     } on FirebaseAuthException catch (e) {
       log("OTP Verification Failed: ${e.message}");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("OTP Verification Failed: ${e.message}")),
       );
     }
+  }
+
+  //-------------forgot password------------------
+
+  Future resetPassword(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 }

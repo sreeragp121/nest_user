@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nest_user/constants/colors.dart';
 import 'package:nest_user/controllers/auth_provider/auth_provider.dart';
+import 'package:nest_user/views/auth/forgot_password/forgot_password_page.dart';
 import 'package:nest_user/views/auth/signup_page/sign_up_screen.dart';
 import 'package:nest_user/widgets/my_button.dart';
 import 'package:nest_user/widgets/my_custom_text_field.dart';
@@ -75,11 +76,20 @@ class LoginPageEmailAuth extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          const Align(
+          Align(
             alignment: Alignment.topRight,
-            child: Text(
-              ' Forgot Password?',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForgotPasswordPage(),
+                    ));
+              },
+              child: Text(
+                ' Forgot Password?',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
             ),
           ),
           const SizedBox(

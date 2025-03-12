@@ -111,27 +111,23 @@ class SignupRegistration extends StatelessWidget {
                       if (passwordController.text ==
                           repasswordController.text) {
                         bool success = await authProvider.createAccount(
-                            emailController.text, passwordController.text);
+                            emailController.text,
+                            passwordController.text,
+                            context);
                         if (success) {
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                backgroundColor: AppColors.green,
-                                content: Text('Account Created Successfully')),
-                          );
-
                           Navigator.pushReplacement(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LogInPageMain(),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LogInPageMain(),
+                            ),
+                          );
                         }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             backgroundColor: AppColors.red,
-                              content: Text('Passwords do not match')),
+                            content: Text('Passwords do not match'),
+                          ),
                         );
                       }
                     }
