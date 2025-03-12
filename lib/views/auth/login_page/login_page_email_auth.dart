@@ -14,7 +14,7 @@ class LoginPageEmailAuth extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    final authProvider = Provider.of<AuthProviders>(context);
+    final authProvider = Provider.of<MyAuthProviders>(context);
     final formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,

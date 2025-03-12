@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => SplashProvider(),
         ),
-        ChangeNotifierProvider(create: (_) => AuthProviders()),
+        ChangeNotifierProvider(create: (_) => MyAuthProviders()),
         ChangeNotifierProvider(create: (_) => CustometexfieldProvider()),
       ],
       child: const MaterialApp(

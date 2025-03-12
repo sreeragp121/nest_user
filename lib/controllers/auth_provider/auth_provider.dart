@@ -6,8 +6,9 @@ import 'package:nest_user/constants/colors.dart';
 import 'package:nest_user/views/auth/login_page/login_page_main.dart';
 import 'package:nest_user/views/home_screen/home_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthProviders with ChangeNotifier {
+class MyAuthProviders with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   String? _errorMessage;
@@ -16,8 +17,26 @@ class AuthProviders with ChangeNotifier {
   String? verificationId;
 
   String? get errorMessage => _errorMessage;
-
   User? get user => _user;
+
+
+
+//-------------check user is logged in or not------------------
+  Future checkUserLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn');
+    if (isLoggedIn == null || isLoggedIn == false) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+// -----------save user logged in-------------
+
+  Future saveUserLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', true);
+  }
 
   // ----------- Registration using google account---------------
 
@@ -121,6 +140,7 @@ class AuthProviders with ChangeNotifier {
         ),
         (route) => false,
       );
+      saveUserLoggedIn();
     } on FirebaseAuthException catch (e) {
       String errorMessage;
       if (e.code == 'user-not-found') {
@@ -154,6 +174,9 @@ class AuthProviders with ChangeNotifier {
       ),
       (route) => false,
     );
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', false);
   }
 //----------------------Send OTP for Phone Authentication-------------------
 

@@ -22,7 +22,7 @@ class LoginUsing extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Consumer<AuthProviders>(
+          Consumer<MyAuthProviders>(
             builder: (context, authProvider, child) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -10,7 +10,7 @@ class ForgotPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProviders>(context);
+    final authProvider = Provider.of<MyAuthProviders>(context);
     TextEditingController emailController = TextEditingController();
     final formKey = GlobalKey<FormState>();
     return Scaffold(

@@ -13,7 +13,7 @@ class LoginPagePhoneAuth extends StatelessWidget {
     final TextEditingController phoneNumController = TextEditingController();
     final TextEditingController otpController = TextEditingController();
 
-    return Consumer<AuthProviders>(
+    return Consumer<MyAuthProviders>(
       builder: (context, authProvider, child) {
         return Column(
           children: [

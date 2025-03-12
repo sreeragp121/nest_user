@@ -7,7 +7,7 @@ class MyHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProviders>(context);
+    final authProvider = Provider.of<MyAuthProviders>(context);
 
     void showLogoutDialog() {
       showDialog(

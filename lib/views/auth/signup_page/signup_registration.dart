@@ -103,7 +103,7 @@ class SignupRegistration extends StatelessWidget {
           const SizedBox(
             height: 30,
           ),
-          Consumer<AuthProviders>(
+          Consumer<MyAuthProviders>(
             builder: (context, authProvider, child) {
               return MyCustomButton(
                   onPressed: () async {

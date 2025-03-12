@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nest_user/constants/colors.dart';
-import 'package:nest_user/views/home_screen/home_screen.dart';
 import 'package:nest_user/views/auth/login_page/login_page_main.dart';
 import 'package:nest_user/widgets/my_button.dart';
 
@@ -31,21 +30,21 @@ class MyGetStartScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 200,
                 ),
-                Text(
+                const Text(
                   'Nest',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 35,
                     fontWeight: FontWeight.bold,
                     color: AppColors.white,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 250,
                   child: Text(
                     "Every stay, a step towards unforgettable memories, booked with ease and comfort.",
@@ -57,7 +56,7 @@ class MyGetStartScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 ),
                 MyCustomButton(
@@ -65,7 +64,7 @@ class MyGetStartScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LogInPageMain(),
+                            builder: (context) => const LogInPageMain(),
                           ));
                     },
                     backgroundcolor: AppColors.white,
